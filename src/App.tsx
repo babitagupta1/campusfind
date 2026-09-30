@@ -1,122 +1,135 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+// import { useState } from "react";
+// import Navbar from "./components/Navbar";
+// import ItemCard from "./components/ItemCard";
+// import { items } from "./data/items";
+// import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+// function App() {
+//   const [search, setSearch] = useState("");
+//   const [typeFilter, setTypeFilter] = useState("All");
+//   const [categoryFilter, setCategoryFilter] = useState("All");
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+//   const categories: string[] = [
+//   "All",
+//   ...Array.from(
+//     new Set(items.map((item) => item.category))
+//   ),
+// ];
+//   const filteredItems = items.filter((item) => {
+//     const matchesSearch =
+//       item.title.toLowerCase().includes(search.toLowerCase()) ||
+//       item.description.toLowerCase().includes(search.toLowerCase()) ||
+//       item.location.toLowerCase().includes(search.toLowerCase());
 
-      <div className="ticks"></div>
+//     const matchesType =
+//       typeFilter === "All" || item.type === typeFilter;
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+//     const matchesCategory =
+//       categoryFilter === "All" ||
+//       item.category === categoryFilter;
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-}
+//     return matchesSearch && matchesType && matchesCategory;
+//   });
 
-export default App
+//   return (
+//     <>
+//       <Navbar />
+
+//       <main className="container">
+//         <section className="hero">
+//           <span className="hero-label">
+//             YOUR CAMPUS, CONNECTED
+//           </span>
+
+//           <h1>
+//             Lost something?
+//             <br />
+//             <span>Let's find it.</span>
+//           </h1>
+
+//           <p>
+//             Find lost belongings or help someone recover
+//             what they have lost.
+//           </p>
+//         </section>
+
+//         <section className="listing-section">
+//           <div className="section-heading">
+//             <div>
+//               <h2>Lost & Found Items</h2>
+//               <p>Browse items reported by students.</p>
+//             </div>
+
+//             <span className="result-count">
+//               {filteredItems.length} items
+//             </span>
+//           </div>
+
+//           <div className="filters">
+//             <input
+//               type="search"
+//               placeholder="Search by item or location..."
+//               value={search}
+//               onChange={(event) => setSearch(event.target.value)}
+//               aria-label="Search items"
+//             />
+
+//             <select
+//               value={typeFilter}
+//               onChange={(event) => setTypeFilter(event.target.value)}
+//               aria-label="Filter by item type"
+//             >
+//               <option value="All">All Items</option>
+//               <option value="Lost">Lost Items</option>
+//               <option value="Found">Found Items</option>
+//             </select>
+
+//             <select
+//               value={categoryFilter}
+//               onChange={(event) =>
+//                 setCategoryFilter(event.target.value)
+//               }
+//               aria-label="Filter by category"
+//             >
+//               {categories.map((category) => (
+//                 <option key={category} value={category}>
+//                   {category === "All"
+//                     ? "All Categories"
+//                     : category}
+//                 </option>
+//               ))}
+//             </select>
+//           </div>
+
+//           {filteredItems.length > 0 ? (
+//             <div className="item-grid">
+//               {filteredItems.map((item) => (
+//                 <ItemCard key={item.id} item={item} />
+//               ))}
+//             </div>
+//           ) : (
+//             <div className="empty-state">
+//               <h3>No items found</h3>
+
+//               <p>
+//                 Try another search term or change your filters.
+//               </p>
+
+//               <button
+//                 onClick={() => {
+//                   setSearch("");
+//                   setTypeFilter("All");
+//                   setCategoryFilter("All");
+//                 }}
+//               >
+//                 Clear Filters
+//               </button>
+//             </div>
+//           )}
+//         </section>
+//       </main>
+//     </>
+//   );
+// }
+
+// export default App;
