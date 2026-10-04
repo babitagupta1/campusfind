@@ -2,41 +2,30 @@ import type { Item } from "../types/item";
 
 interface ItemCardProps {
   item: Item;
+  onViewDetails: (item: Item) => void;
 }
 
-function ItemCard({ item }: ItemCardProps) {
+function ItemCard({ item, onViewDetails }: ItemCardProps) {
   return (
-    <article className="item-card">
-      <div className="item-card-top">
-        <span
-          className={`item-badge ${item.type.toLowerCase()}`}
-        >
-          {item.type}
-        </span>
-
-        <span className="item-category">
-          {item.category}
-        </span>
+    <div className="item-card">
+      <div className={`item-badge ${item.type.toLowerCase()}`}>
+        {item.type}
       </div>
+
+      <p className="item-category">{item.category}</p>
 
       <h3>{item.title}</h3>
 
-      <p className="item-description">
-        {item.description}
+      <p>{item.description}</p>
+
+      <p className="item-location">
+        📍 {item.location}
       </p>
 
-      <div className="item-location">
-        <span>📍</span>
-        <span>{item.location}</span>
-      </div>
-
-      <button
-        className="details-button"
-        onClick={() => alert(`Selected: ${item.title}`)}
-      >
+      <button onClick={() => onViewDetails(item)}>
         View Details
       </button>
-    </article>
+    </div>
   );
 }
 
