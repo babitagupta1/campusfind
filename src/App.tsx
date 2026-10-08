@@ -5,6 +5,7 @@ import ReportItem from "./components/ReportItem";
 import { items } from "./data/item";
 import "./App.css";
 import type { Item } from "./types/item";
+import ItemFilters from "./components/itemFilter";
 
 function App() {
   const [search, setSearch] = useState("");
@@ -102,59 +103,15 @@ function App() {
             </p>
           </div>
 
-          {/* FILTERS */}
-          <div className="filters">
-            <input
-              type="text"
-              placeholder="Search by item or location..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-
-            <select
-              value={typeFilter}
-              onChange={(e) =>
-                setTypeFilter(e.target.value)
-              }
-            >
-              <option value="All">All Types</option>
-              <option value="Lost">Lost</option>
-              <option value="Found">Found</option>
-            </select>
-
-            <select
-              value={categoryFilter}
-              onChange={(e) =>
-                setCategoryFilter(e.target.value)
-              }
-            >
-              <option value="All">All Categories</option>
-              <option value="Personal">Personal</option>
-              <option value="Accessories">
-                Accessories
-              </option>
-              <option value="Documents">Documents</option>
-              <option value="Bags">Bags</option>
-              <option value="Electronics">
-                Electronics
-              </option>
-              <option value="Stationery">
-                Stationery
-              </option>
-            </select>
-
-            {(search ||
-              typeFilter !== "All" ||
-              categoryFilter !== "All") && (
-              <button
-                className="clear-button"
-                onClick={clearFilters}
-              >
-                Clear
-              </button>
-            )}
-          </div>
-
+          <ItemFilters
+            search={search}
+            typeFilter={typeFilter}
+            categoryFilter={categoryFilter}
+            onSearchChange={setSearch}
+            onTypeChange={setTypeFilter}
+            onCategoryChange={setCategoryFilter}
+            onClear={clearFilters}
+          />
           {/* ITEM LIST */}
           {filteredItems.length > 0 ? (
             <div className="item-grid">
