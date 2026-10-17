@@ -2,10 +2,10 @@ import { useState } from "react";
 import Navbar from "./components/Navbar";
 import ItemCard from "./components/ItemCard";
 import ReportItem from "./components/ReportItem";
-import { items } from "./data/item";
 import "./App.css";
 import type { Item } from "./types/item";
-import ItemFilters from "./components/itemFilter";
+import ItemFilters from "./components/ItemFilter";
+import { useItems } from "./hooks/useItems";
 
 function App() {
   const [search, setSearch] = useState("");
@@ -15,7 +15,12 @@ function App() {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [showReportForm, setShowReportForm] = useState(false);
 
-  const [itemList, setItemList] = useState(items);
+  const {
+  itemList,
+  addItem,
+  deleteItem,
+  updateItem,
+} = useItems();
 
   const filteredItems = itemList.filter((item) => {
     const matchesSearch =
@@ -44,10 +49,17 @@ function App() {
   };
 
   const handleAddItem = (newItem: Item) => {
-    setItemList((prevItems) => [newItem, ...prevItems]);
-    setShowReportForm(false);
-  };
+  addItem(newItem);
+  setShowReportForm(false);
+};
 
+  const handleDeleteItem = (id: number) => {
+  deleteItem(id);
+
+  setSelectedItem((currentItem) =>
+    currentItem?.id === id ? null : currentItem
+  );
+};
   return (
     <>
       <Navbar />
@@ -120,6 +132,7 @@ function App() {
                   key={item.id}
                   item={item}
                   onViewDetails={setSelectedItem}
+                  onDelete={handleDeleteItem}
                 />
               ))}
             </div>
