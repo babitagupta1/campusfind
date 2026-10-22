@@ -1,60 +1,71 @@
 import type { Item } from "../types/item";
 
-interface ItemCardProps {
+type ItemCardProps = {
   item: Item;
   onViewDetails: (item: Item) => void;
+  onEdit: (item: Item) => void;
   onDelete: (id: number) => void;
-}
+};
 
-function ItemCard({
+export default function ItemCard({
   item,
   onViewDetails,
+  onEdit,
   onDelete,
 }: ItemCardProps) {
-  const handleDelete = () => {
+  function handleDelete() {
     const confirmed = window.confirm(
-      `Are you sure you want to delete "${item.title}"?`
+      `Delete "${item.title}"?`
     );
 
     if (confirmed) {
       onDelete(item.id);
     }
-  };
+  }
 
   return (
-    <div className="item-card">
-      <div className={`item-badge ${item.type.toLowerCase()}`}>
-        {item.type}
+    <article className="item-card">
+      <div className="item-card-top">
+        <span
+          className={`status-badge ${
+            item.type === "Lost" ? "status-lost" : "status-found"
+          }`}
+        >
+          {item.type}
+        </span>
+
+        <span className="category-badge">{item.category}</span>
       </div>
 
-      <p className="item-category">{item.category}</p>
-
       <h3>{item.title}</h3>
-
-      <p>{item.description}</p>
+      <p className="item-description">{item.description}</p>
 
       <p className="item-location">
-        📍 {item.location}
+        <span aria-hidden="true">⌖</span> {item.location}
       </p>
 
       <div className="item-actions">
         <button
-          type="button"
+          className="button button-primary"
           onClick={() => onViewDetails(item)}
         >
-          View Details
+          Details
         </button>
 
         <button
-          type="button"
-          className="delete-button"
+          className="button button-secondary"
+          onClick={() => onEdit(item)}
+        >
+          Edit
+        </button>
+
+        <button
+          className="button button-danger"
           onClick={handleDelete}
         >
           Delete
         </button>
       </div>
-    </div>
+    </article>
   );
 }
-
-export default ItemCard;

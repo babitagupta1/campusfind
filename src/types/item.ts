@@ -1,12 +1,19 @@
-export type ItemType = "Lost" | "Found";
+import type { z } from "zod";
 
-export interface Item {
-  id: number;
-  title: string;
-  description: string;
-  category: string;
-  location: string;
-  type: ItemType;
-}
+import type {
+  itemSchema,
+  itemsSchema,
+  itemFormSchema,
+  itemTypeSchema,
+  itemCategorySchema,
+} from "../schemas/itemschema";
 
+export type Item = z.infer<typeof itemSchema>;
 
+export type Items = z.infer<typeof itemsSchema>;
+
+export type ItemFormValues = z.infer<typeof itemFormSchema>;
+
+export type ItemType = z.infer<typeof itemTypeSchema>;
+
+export type ItemCategory = z.infer<typeof itemCategorySchema>;

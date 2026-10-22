@@ -1,21 +1,23 @@
-function Navbar() {
+import { APP_NAME, APP_DESCRIPTION } from "../constants/app";
+
+type NavbarProps = {
+  onReportClick: () => void;
+};
+
+export default function Navbar({ onReportClick }: NavbarProps) {
   return (
     <header className="navbar">
-      <a href="/" className="brand">
+      <a className="brand" href="#home">
         <span className="brand-icon">C</span>
-        CampusFind
+        <span>
+          <strong>{APP_NAME}</strong>
+          <small>{APP_DESCRIPTION}</small>
+        </span>
       </a>
 
-      <nav className="nav-links">
-        <a href="#home">Home</a>
-        <a href="#items">Browse Items</a>
-      </nav>
-
-      <a href="#items" className="nav-button">
-        Explore Items
-      </a>
+      <button className="button button-primary" onClick={onReportClick}>
+        + Report an Item
+      </button>
     </header>
   );
 }
-
-export default Navbar;

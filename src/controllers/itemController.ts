@@ -1,30 +1,29 @@
-import type { Item } from "../types/item";
+import type { Item, ItemFormValues } from "../types/item";
+
 import {
   addItemToList,
-  removeItemFromList,
   updateItemInList,
+  removeItemFromList,
 } from "../services/itemService";
 
-// Add action
 export function createItemController(
-  currentItems: Item[],
-  newItem: Item
+  items: Item[],
+  values: ItemFormValues
 ): Item[] {
-  return addItemToList(currentItems, newItem);
+  return addItemToList(items, values);
 }
 
-// Delete action
+export function editItemController(
+  items: Item[],
+  id: number,
+  values: ItemFormValues
+): Item[] {
+  return updateItemInList(items, id, values);
+}
+
 export function deleteItemController(
-  currentItems: Item[],
+  items: Item[],
   id: number
 ): Item[] {
-  return removeItemFromList(currentItems, id);
-}
-
-// Update action
-export function editItemController(
-  currentItems: Item[],
-  updatedItem: Item
-): Item[] {
-  return updateItemInList(currentItems, updatedItem);
+  return removeItemFromList(items, id);
 }

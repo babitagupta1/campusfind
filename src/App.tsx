@@ -1,226 +1,157 @@
 import { useState } from "react";
-import Navbar from "./components/Navbar";
-import ItemCard from "./components/ItemCard";
-import ReportItem from "./components/ReportItem";
-import "./App.css";
-import type { Item } from "./types/item";
-import ItemFilters from "./components/ItemFilter";
+
+import { APP_NAME } from "./constants/app";
 import { useItems } from "./hooks/useItems";
+import { useItemFilters } from "./hooks/useItemFilters";
 
-function App() {
-  const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState("All");
-  const [categoryFilter, setCategoryFilter] = useState("All");
+import type { Item, ItemFormValues } from "./types/item";
 
-  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-  const [showReportForm, setShowReportForm] = useState(false);
+import Navbar from "./components/Navbar";
+import ItemStats from "./components/ItemStats";
+import ItemFilters from "./components/ItemFilter";
+import ItemCard from "./components/ItemCard";
+import ItemDetails from "./components/ItemDetails";
+import ReportItem from "./components/ReportItem";
+import EditItem from "./components/EditItem";
+import EmptyState from "./components/EmptyState";
+
+export default function App() {
+  const { itemList, addItem, updateItem, deleteItem } = useItems();
 
   const {
-  itemList,
-  addItem,
-  deleteItem,
-  updateItem,
-} = useItems();
+    search,
+    setSearch,
+    typeFilter,
+    setTypeFilter,
+    categoryFilter,
+    setCategoryFilter,
+    filteredItems,
+    clearFilters,
+  } = useItemFilters(itemList);
 
-  const filteredItems = itemList.filter((item) => {
-    const matchesSearch =
-      item.title.toLowerCase().includes(search.toLowerCase()) ||
-      item.description.toLowerCase().includes(search.toLowerCase()) ||
-      item.location.toLowerCase().includes(search.toLowerCase());
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [editingItem, setEditingItem] = useState<Item | null>(null);
+  const [showReportForm, setShowReportForm] = useState(false);
 
-    const matchesType =
-      typeFilter === "All" || item.type === typeFilter;
+  function handleAddItem(values: ItemFormValues) {
+    addItem(values);
+    setShowReportForm(false);
+  }
 
-    const matchesCategory =
-      categoryFilter === "All" ||
-      item.category === categoryFilter;
+  function handleUpdateItem(values: ItemFormValues) {
+    if (!editingItem) return;
 
-    return (
-      matchesSearch &&
-      matchesType &&
-      matchesCategory
-    );
-  });
+    updateItem(editingItem.id, values);
+    setEditingItem(null);
+  }
 
-  const clearFilters = () => {
-    setSearch("");
-    setTypeFilter("All");
-    setCategoryFilter("All");
-  };
+  function handleDeleteItem(id: number) {
+    deleteItem(id);
 
-  const handleAddItem = (newItem: Item) => {
-  addItem(newItem);
-  setShowReportForm(false);
-};
+    if (selectedItem?.id === id) {
+      setSelectedItem(null);
+    }
 
-  const handleDeleteItem = (id: number) => {
-  deleteItem(id);
+    if (editingItem?.id === id) {
+      setEditingItem(null);
+    }
+  }
 
-  setSelectedItem((currentItem) =>
-    currentItem?.id === id ? null : currentItem
-  );
-};
+  function handleEditItem(item: Item) {
+    setSelectedItem(null);
+    setEditingItem(item);
+  }
+
   return (
-    <>
-      <Navbar />
+    <div className="app" id="home">
+      <Navbar onReportClick={() => setShowReportForm(true)} />
 
-      <main>
-        {/* HERO SECTION */}
-        <section className="hero" id="home">
-          <div>
-            <p className="hero-label">
-              CAMPUS LOST & FOUND
-            </p>
+      <main className="main-content">
+        <section className="hero">
+          <span className="eyebrow">YOUR CAMPUS COMMUNITY</span>
+          <h1>Lost something? <span>Find it here.</span></h1>
+          <p>
+            Report lost belongings, share found items, and help your
+            campus community reconnect with what matters.
+          </p>
 
-            <h1>
-              Find What You Lost.
-              <br />
-              Help Others Find Theirs.
-            </h1>
-
-            <p>
-              A simple way for students to report,
-              search, and recover lost items on campus.
-            </p>
-
-            <a href="#items" className="hero-button">
-              Browse Items
-            </a>
-
-            <button
-              className="report-button"
-              onClick={() => setShowReportForm(true)}
-            >
-              + Report an Item
-            </button>
-          </div>
+          <button
+            className="button button-primary hero-button"
+            onClick={() => setShowReportForm(true)}
+          >
+            + Report an Item
+          </button>
         </section>
 
-        {/* ITEMS SECTION */}
-        <section className="listing-section" id="items">
+        <ItemStats items={itemList} />
+
+        <section className="browse-section">
           <div className="section-heading">
             <div>
-              <p className="section-label">
-                CAMPUS ITEMS
-              </p>
-
-              <h2>
-                Browse Lost & Found Items
-              </h2>
+              <h2>Campus items</h2>
+              <p>Browse recent lost and found reports.</p>
             </div>
 
-            <p>
-              {filteredItems.length} item
-              {filteredItems.length !== 1 ? "s" : ""} found
-            </p>
+            <span className="result-count">
+              {filteredItems.length}{" "}
+              {filteredItems.length === 1 ? "item" : "items"}
+            </span>
           </div>
 
           <ItemFilters
             search={search}
+            setSearch={setSearch}
             typeFilter={typeFilter}
+            setTypeFilter={setTypeFilter}
             categoryFilter={categoryFilter}
-            onSearchChange={setSearch}
-            onTypeChange={setTypeFilter}
-            onCategoryChange={setCategoryFilter}
-            onClear={clearFilters}
+            setCategoryFilter={setCategoryFilter}
+            clearFilters={clearFilters}
           />
-          {/* ITEM LIST */}
-          {filteredItems.length > 0 ? (
-            <div className="item-grid">
+
+          {filteredItems.length === 0 ? (
+            <EmptyState onClear={clearFilters} />
+          ) : (
+            <div className="items-grid">
               {filteredItems.map((item) => (
                 <ItemCard
                   key={item.id}
                   item={item}
                   onViewDetails={setSelectedItem}
+                  onEdit={handleEditItem}
                   onDelete={handleDeleteItem}
                 />
               ))}
             </div>
-          ) : (
-            <div className="empty-state">
-              <h3>No items found</h3>
-
-              <p>
-                Try changing your search or filters.
-              </p>
-
-              <button onClick={clearFilters}>
-                Clear Filters
-              </button>
-            </div>
           )}
         </section>
-
-        {/* ITEM DETAILS MODAL */}
-        {selectedItem && (
-          <div className="details-overlay">
-            <div className="details-modal">
-              <button
-                className="close-button"
-                onClick={() => setSelectedItem(null)}
-                type="button"
-              >
-                ×
-              </button>
-
-              <p className="section-label">
-                ITEM DETAILS
-              </p>
-
-              <div
-                className={`item-badge ${selectedItem.type.toLowerCase()}`}
-              >
-                {selectedItem.type}
-              </div>
-
-              <h2>{selectedItem.title}</h2>
-
-              <p className="details-description">
-                {selectedItem.description}
-              </p>
-
-              <div className="details-info">
-                <p>
-                  <strong>Category:</strong>{" "}
-                  {selectedItem.category}
-                </p>
-
-                <p>
-                  <strong>Location:</strong>{" "}
-                  {selectedItem.location}
-                </p>
-
-                <p>
-                  <strong>Status:</strong>{" "}
-                  {selectedItem.type}
-                </p>
-              </div>
-
-              <button
-                className="claim-button"
-                onClick={() =>
-                  alert(
-                    `Claim request for ${selectedItem.title} will be added later.`
-                  )
-                }
-                type="button"
-              >
-                I Found This Item
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* REPORT ITEM MODAL */}
-        {showReportForm && (
-          <ReportItem
-            onSubmitItem={handleAddItem}
-            onClose={() => setShowReportForm(false)}
-          />
-        )}
       </main>
-    </>
+
+      <footer className="footer">
+        <strong>{APP_NAME}</strong>
+        <p>Helping campus belongings find their way home.</p>
+      </footer>
+
+      {showReportForm && (
+        <ReportItem
+          onAdd={handleAddItem}
+          onClose={() => setShowReportForm(false)}
+        />
+      )}
+
+      {editingItem && (
+        <EditItem
+          item={editingItem}
+          onSave={handleUpdateItem}
+          onClose={() => setEditingItem(null)}
+        />
+      )}
+
+      {selectedItem && (
+        <ItemDetails
+          item={selectedItem}
+          onClose={() => setSelectedItem(null)}
+        />
+      )}
+    </div>
   );
 }
-
-export default App;

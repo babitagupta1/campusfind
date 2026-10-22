@@ -1,53 +1,58 @@
+import type { Item } from "../types/item";
 
-import type { Item } from "../types/item"
-export const items:Item[]=[
+export const initialItems: Item[] = [
   {
     id: 1,
     title: "Black Wallet",
-    description: "A black wallet with some cards inside.",
+    description: "Black leather wallet with a student ID.",
     category: "Personal",
     location: "College Library",
     type: "Lost",
+    createdAt: "2026-10-20T09:00:00.000Z",
   },
   {
     id: 2,
     title: "Blue Water Bottle",
-    description: "A blue water bottle left in the classroom.",
+    description: "Blue stainless steel water bottle.",
     category: "Accessories",
     location: "Room 204",
     type: "Found",
+    createdAt: "2026-10-20T10:00:00.000Z",
   },
   {
     id: 3,
     title: "Student ID Card",
-    description: "A student identity card was found.",
+    description: "Student ID card found near the entrance.",
     category: "Documents",
     location: "College Canteen",
     type: "Found",
+    createdAt: "2026-10-20T11:00:00.000Z",
   },
   {
     id: 4,
     title: "Black Backpack",
-    description: "A black backpack went missing.",
+    description: "Black backpack containing notebooks.",
     category: "Bags",
     location: "College Playground",
     type: "Lost",
+    createdAt: "2026-10-20T12:00:00.000Z",
   },
   {
     id: 5,
     title: "Wireless Earbuds",
-    description: "A pair of wireless earbuds was found.",
+    description: "White wireless earbuds in a small case.",
     category: "Electronics",
     location: "Computer Lab",
     type: "Found",
+    createdAt: "2026-10-20T13:00:00.000Z",
   },
   {
     id: 6,
     title: "Mathematics Notebook",
-    description: "A mathematics notebook is missing.",
+    description: "Blue notebook with handwritten notes.",
     category: "Stationery",
     location: "Room 105",
     type: "Lost",
+    createdAt: "2026-10-20T14:00:00.000Z",
   },
 ];
-

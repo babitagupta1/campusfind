@@ -1,102 +1,90 @@
-interface ItemFiltersProps {
+import {
+  ALL_FILTER,
+  ITEM_CATEGORIES,
+  ITEM_TYPES,
+} from "../constants/item";
+
+import type { ItemCategory, ItemType } from "../types/item";
+
+type ItemFiltersProps = {
   search: string;
-  typeFilter: string;
-  categoryFilter: string;
+  setSearch: (value: string) => void;
+  typeFilter: ItemType | typeof ALL_FILTER;
+  setTypeFilter: (value: ItemType | typeof ALL_FILTER) => void;
+  categoryFilter: ItemCategory | typeof ALL_FILTER;
+  setCategoryFilter: (
+    value: ItemCategory | typeof ALL_FILTER
+  ) => void;
+  clearFilters: () => void;
+};
 
-  onSearchChange: (value: string) => void;
-  onTypeChange: (value: string) => void;
-  onCategoryChange: (value: string) => void;
-  onClear: () => void;
-}
-
-function ItemFilters({
+export default function ItemFilters({
   search,
+  setSearch,
   typeFilter,
+  setTypeFilter,
   categoryFilter,
-  onSearchChange,
-  onTypeChange,
-  onCategoryChange,
-  onClear,
+  setCategoryFilter,
+  clearFilters,
 }: ItemFiltersProps) {
-  const hasFilters =
-    search ||
-    typeFilter !== "All" ||
-    categoryFilter !== "All";
-
   return (
-    <div className="filters">
+    <section className="filter-panel">
+      <div className="search-box">
+        <label htmlFor="item-search">Search items</label>
+        <input
+          id="item-search"
+          type="search"
+          placeholder="Search title, location, description..."
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+        />
+      </div>
 
-      {/* Search */}
-      <input
-        type="text"
-        placeholder="Search by item or location..."
-        value={search}
-        onChange={(e) =>
-          onSearchChange(e.target.value)
-        }
-      />
-
-      {/* Type Filter */}
-      <select
-        value={typeFilter}
-        onChange={(e) =>
-          onTypeChange(e.target.value)
-        }
-      >
-        <option value="All">All Types</option>
-        <option value="Lost">Lost</option>
-        <option value="Found">Found</option>
-      </select>
-
-      {/* Category Filter */}
-      <select
-        value={categoryFilter}
-        onChange={(e) =>
-          onCategoryChange(e.target.value)
-        }
-      >
-        <option value="All">
-          All Categories
-        </option>
-
-        <option value="Personal">
-          Personal
-        </option>
-
-        <option value="Accessories">
-          Accessories
-        </option>
-
-        <option value="Documents">
-          Documents
-        </option>
-
-        <option value="Bags">
-          Bags
-        </option>
-
-        <option value="Electronics">
-          Electronics
-        </option>
-
-        <option value="Stationery">
-          Stationery
-        </option>
-      </select>
-
-      {/* Clear */}
-      {hasFilters && (
-        <button
-          className="clear-button"
-          onClick={onClear}
-          type="button"
+      <div className="filter-field">
+        <label htmlFor="type-filter">Item type</label>
+        <select
+          id="type-filter"
+          value={typeFilter}
+          onChange={(event) =>
+            setTypeFilter(event.target.value as ItemType | typeof ALL_FILTER)
+          }
         >
-          Clear
-        </button>
-      )}
+          <option value={ALL_FILTER}>All types</option>
+          {ITEM_TYPES.map((type) => (
+            <option key={type} value={type}>
+              {type}
+            </option>
+          ))}
+        </select>
+      </div>
 
-    </div>
+      <div className="filter-field">
+        <label htmlFor="category-filter">Category</label>
+        <select
+          id="category-filter"
+          value={categoryFilter}
+          onChange={(event) =>
+            setCategoryFilter(
+              event.target.value as ItemCategory | typeof ALL_FILTER
+            )
+          }
+        >
+          <option value={ALL_FILTER}>All categories</option>
+          {ITEM_CATEGORIES.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <button
+        className="button button-secondary clear-button"
+        type="button"
+        onClick={clearFilters}
+      >
+        Clear filters
+      </button>
+    </section>
   );
 }
-
-export default ItemFilters;

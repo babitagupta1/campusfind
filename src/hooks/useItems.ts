@@ -1,42 +1,43 @@
-import { useState } from "react";
-import type { Item } from "../types/item";
-import { getInitialItems } from "../services/itemService";
+import { useEffect, useState } from "react";
+
+import type { Item, ItemFormValues } from "../types/item";
+import { getInitialItems, saveItems } from "../services/itemService";
+
 import {
   createItemController,
-  deleteItemController,
   editItemController,
+  deleteItemController,
 } from "../controllers/itemController";
 
 export function useItems() {
-  const [itemList, setItemList] = useState<Item[]>(
-    () => getInitialItems()
-  );
+  const [itemList, setItemList] = useState<Item[]>(getInitialItems);
 
-  // Add item
-  const addItem = (newItem: Item) => {
+  useEffect(() => {
+    saveItems(itemList);
+  }, [itemList]);
+
+  function addItem(values: ItemFormValues) {
     setItemList((currentItems) =>
-      createItemController(currentItems, newItem)
+      createItemController(currentItems, values)
     );
-  };
+  }
 
-  // Delete item
-  const deleteItem = (id: number) => {
+  function updateItem(id: number, values: ItemFormValues) {
+    setItemList((currentItems) =>
+      editItemController(currentItems, id, values)
+    );
+  }
+
+  function deleteItem(id: number) {
     setItemList((currentItems) =>
       deleteItemController(currentItems, id)
     );
-  };
-
-  // Update item
-  const updateItem = (updatedItem: Item) => {
-    setItemList((currentItems) =>
-      editItemController(currentItems, updatedItem)
-    );
-  };
+  }
 
   return {
     itemList,
     addItem,
-    deleteItem,
     updateItem,
+    deleteItem,
   };
 }
