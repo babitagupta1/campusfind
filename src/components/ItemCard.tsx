@@ -14,13 +14,7 @@ export default function ItemCard({
   onDelete,
 }: ItemCardProps) {
   function handleDelete() {
-    const confirmed = window.confirm(
-      `Delete "${item.title}"?`
-    );
-
-    if (confirmed) {
-      onDelete(item.id);
-    }
+    onDelete(item.id);
   }
 
   return (
@@ -46,6 +40,7 @@ export default function ItemCard({
 
       <div className="item-actions">
         <button
+          type="button"
           className="button button-primary"
           onClick={() => onViewDetails(item)}
         >
@@ -53,6 +48,7 @@ export default function ItemCard({
         </button>
 
         <button
+          type="button"
           className="button button-secondary"
           onClick={() => onEdit(item)}
         >
@@ -60,7 +56,9 @@ export default function ItemCard({
         </button>
 
         <button
+          type="button"
           className="button button-danger"
+          aria-label={`Delete ${item.title}`}
           onClick={handleDelete}
         >
           Delete

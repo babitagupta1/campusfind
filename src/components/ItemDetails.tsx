@@ -21,6 +21,7 @@ export default function ItemDetails({
         <div className="modal-heading">
           <h2 id="details-title">Item details</h2>
           <button
+            type="button"
             className="icon-button"
             aria-label="Close details"
             onClick={onClose}
@@ -59,7 +60,7 @@ export default function ItemDetails({
           </div>
         </dl>
 
-        <button className="button button-primary full-width" onClick={onClose}>
+        <button type="button" className="button button-primary full-width" onClick={onClose}>
           Close
         </button>
       </section>

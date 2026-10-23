@@ -25,6 +25,7 @@ export default function ReportItem({
             <p className="muted">Share details to help someone find it.</p>
           </div>
           <button
+            type="button"
             className="icon-button"
             aria-label="Close report form"
             onClick={onClose}

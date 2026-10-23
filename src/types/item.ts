@@ -6,7 +6,7 @@ import type {
   itemFormSchema,
   itemTypeSchema,
   itemCategorySchema,
-} from "../schemas/itemschema";
+} from "../schemas/itemSchema";
 
 export type Item = z.infer<typeof itemSchema>;
 

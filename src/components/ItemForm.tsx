@@ -8,7 +8,7 @@ import {
 } from "../constants/item";
 
 import { VALIDATION_MESSAGES } from "../constants/validationMessages";
-import { itemFormSchema } from "../schemas/itemschema";
+import { itemFormSchema } from "../schemas/itemSchema";
 
 import type { Item, ItemFormValues } from "../types/item";
 

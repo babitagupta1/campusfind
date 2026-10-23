@@ -1,12 +1,13 @@
 import { useState } from "react";
+import "./App.css";
 
-import { APP_NAME } from "./constants/app";
 import { useItems } from "./hooks/useItems";
 import { useItemFilters } from "./hooks/useItemFilters";
 
 import type { Item, ItemFormValues } from "./types/item";
 
 import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 import ItemStats from "./components/ItemStats";
 import ItemFilters from "./components/ItemFilter";
 import ItemCard from "./components/ItemCard";
@@ -32,10 +33,25 @@ export default function App() {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
   const [showReportForm, setShowReportForm] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [activeSection, setActiveSection] = useState("dashboard");
+  const [profileName, setProfileName] = useState("Babita Gupta");
+
+  const sectionTitles: Record<string, string> = {
+    dashboard: "Dashboard",
+    browse: "Browse Items",
+    reports: "My Reports",
+    notifications: "Notifications",
+    settings: "Settings",
+  };
 
   function handleAddItem(values: ItemFormValues) {
     addItem(values);
     setShowReportForm(false);
+  }
+
+  function handleReportClick() {
+    setShowReportForm(true);
   }
 
   function handleUpdateItem(values: ItemFormValues) {
@@ -62,74 +78,136 @@ export default function App() {
     setEditingItem(item);
   }
 
-  return (
-    <div className="app" id="home">
-      <Navbar onReportClick={() => setShowReportForm(true)} />
-
-      <main className="main-content">
-        <section className="hero">
-          <span className="eyebrow">YOUR CAMPUS COMMUNITY</span>
-          <h1>Lost something? <span>Find it here.</span></h1>
-          <p>
-            Report lost belongings, share found items, and help your
-            campus community reconnect with what matters.
-          </p>
-
-          <button
-            className="button button-primary hero-button"
-            onClick={() => setShowReportForm(true)}
-          >
-            + Report an Item
-          </button>
-        </section>
-
-        <ItemStats items={itemList} />
-
-        <section className="browse-section">
-          <div className="section-heading">
-            <div>
-              <h2>Campus items</h2>
-              <p>Browse recent lost and found reports.</p>
-            </div>
-
-            <span className="result-count">
-              {filteredItems.length}{" "}
-              {filteredItems.length === 1 ? "item" : "items"}
-            </span>
+  function renderItemsSection(title: string, description: string, items = filteredItems) {
+    return (
+      <section className="browse-section">
+        <div className="section-heading">
+          <div>
+            <h2>{title}</h2>
+            <p>{description}</p>
           </div>
+          <span className="result-count">
+            {items.length} {items.length === 1 ? "item" : "items"}
+          </span>
+        </div>
 
-          <ItemFilters
-            search={search}
-            setSearch={setSearch}
-            typeFilter={typeFilter}
-            setTypeFilter={setTypeFilter}
-            categoryFilter={categoryFilter}
-            setCategoryFilter={setCategoryFilter}
-            clearFilters={clearFilters}
-          />
+        <ItemFilters
+          search={search}
+          setSearch={setSearch}
+          typeFilter={typeFilter}
+          setTypeFilter={setTypeFilter}
+          categoryFilter={categoryFilter}
+          setCategoryFilter={setCategoryFilter}
+          clearFilters={clearFilters}
+        />
 
-          {filteredItems.length === 0 ? (
-            <EmptyState onClear={clearFilters} />
-          ) : (
-            <div className="items-grid">
-              {filteredItems.map((item) => (
-                <ItemCard
-                  key={item.id}
-                  item={item}
-                  onViewDetails={setSelectedItem}
-                  onEdit={handleEditItem}
-                  onDelete={handleDeleteItem}
-                />
-              ))}
-            </div>
+        {items.length === 0 ? (
+          <EmptyState onClear={clearFilters} />
+        ) : (
+          <div className="items-grid">
+            {items.map((item) => (
+              <ItemCard
+                key={item.id}
+                item={item}
+                onViewDetails={setSelectedItem}
+                onEdit={handleEditItem}
+                onDelete={handleDeleteItem}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+    );
+  }
+
+  return (
+    <div className={`app ${darkMode ? "dark-mode" : ""}`} id="home">
+      <Sidebar
+        activeSection={activeSection}
+        onNavigate={setActiveSection}
+        profileName={profileName}
+      />
+      <div className="app-shell">
+        <Navbar
+          darkMode={darkMode}
+          onToggleDarkMode={() => setDarkMode((value) => !value)}
+          title={sectionTitles[activeSection]}
+          profileName={profileName}
+        />
+
+        <main className="main-content">
+          {activeSection === "dashboard" && (
+            <>
+              <section className="hero" id="dashboard">
+                <div className="hero-copy">
+                  <span className="eyebrow">YOUR CAMPUS COMMUNITY</span>
+                  <h2>Lost something? <span>Find it here.</span></h2>
+                  <p>
+                    Report lost belongings, share found items, and help your
+                    campus community reconnect with what matters.
+                  </p>
+                  <button
+                    type="button"
+                    className="button button-primary hero-button"
+                    onClick={handleReportClick}
+                  >
+                    + Report an item
+                  </button>
+                </div>
+              </section>
+              <ItemStats items={itemList} />
+              {renderItemsSection(
+                "Recent campus items",
+                "Browse the latest lost and found reports."
+              )}
+            </>
           )}
-        </section>
-      </main>
+          {activeSection === "browse" &&
+            renderItemsSection("Browse campus items", "Search and filter all campus reports.")}
+          {activeSection === "reports" &&
+            renderItemsSection("My reports", "Manage the reports you have submitted.", filteredItems)}
+          {activeSection === "notifications" && (
+            <section className="content-panel">
+              <div className="panel-icon">!</div>
+              <h2>Notifications</h2>
+              <p>You are all caught up. New updates about your reports will appear here.</p>
+            </section>
+          )}
+          {activeSection === "settings" && (
+            <section className="content-panel settings-panel">
+              <div>
+                <span className="eyebrow settings-eyebrow">ACCOUNT PREFERENCES</span>
+                <h2>Settings</h2>
+                <p>Manage your CampusFind preferences.</p>
+              </div>
+              <label className="settings-row">
+                <span>
+                  <strong>Dark mode</strong>
+                  <small>Use a darker color scheme across CampusFind.</small>
+                </span>
+                <input
+                  type="checkbox"
+                  checked={darkMode}
+                  onChange={(event) => setDarkMode(event.target.checked)}
+                />
+              </label>
+              <label className="settings-field">
+                <span>Profile name</span>
+                <input
+                  value={profileName}
+                  onChange={(event) => setProfileName(event.target.value)}
+                  placeholder="Your name"
+                />
+              </label>
+            </section>
+          )}
+        </main>
 
-      <footer className="footer">
-        <strong>{APP_NAME}</strong>
-        <p>Helping campus belongings find their way home.</p>
-      </footer>
+        <footer className="footer">
+          <strong>CampusFind</strong>
+          <p>Helping campus belongings find their way home.</p>
+        </footer>
+      </div>
 
       {showReportForm && (
         <ReportItem

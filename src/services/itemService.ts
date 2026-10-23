@@ -1,5 +1,5 @@
 import { ITEM_STORAGE_KEY } from "../constants/item";
-import { itemsSchema } from "../schemas/itemschema";
+import { itemsSchema } from "../schemas/itemSchema";
 import type { Item, ItemFormValues } from "../types/item";
 import { initialItems } from "../data/item";
 
