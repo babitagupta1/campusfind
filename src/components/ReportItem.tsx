@@ -11,30 +11,31 @@ export default function ReportItem({
   onClose,
 }: ReportItemProps) {
   return (
-    <div className="modal-backdrop" onClick={onClose}>
+    <div className="modal d-block bg-dark bg-opacity-50" tabIndex={-1} role="dialog" onClick={onClose}>
       <section
-        className="modal"
+        className="modal-dialog modal-dialog-centered"
         role="dialog"
         aria-modal="true"
         aria-labelledby="report-title"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="modal-heading">
+        <div className="modal-content" onClick={(event) => event.stopPropagation()}>
+        <div className="modal-header">
           <div>
-            <h2 id="report-title">Report an Item</h2>
-            <p className="muted">Share details to help someone find it.</p>
+            <h2 className="modal-title fs-5" id="report-title">Report an Item</h2>
+            <p className="text-secondary mb-0">Share details to help someone find it.</p>
           </div>
           <button
             type="button"
-            className="icon-button"
+            className="btn-close"
             aria-label="Close report form"
             onClick={onClose}
           >
-            ×
           </button>
         </div>
 
-        <ItemForm onSubmit={onAdd} onCancel={onClose} />
+        <div className="modal-body"><ItemForm onSubmit={onAdd} onCancel={onClose} /></div>
+        </div>
       </section>
     </div>
   );

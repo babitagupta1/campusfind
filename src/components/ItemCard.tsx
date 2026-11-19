@@ -1,4 +1,5 @@
 import type { Item } from "../types/item";
+import { BsEye, BsPencil, BsTrash, BsGeoAlt } from "react-icons/bs";
 
 type ItemCardProps = {
   item: Item;
@@ -18,51 +19,53 @@ export default function ItemCard({
   }
 
   return (
-    <article className="item-card">
-      <div className="item-card-top">
+    <article className="col-md-6 col-xl-4">
+      <div className="card h-100 shadow-sm">
+      <div className="card-body d-flex flex-column">
+        <div className="d-flex justify-content-between align-items-center mb-3">
         <span
-          className={`status-badge ${
-            item.type === "Lost" ? "status-lost" : "status-found"
-          }`}
+          className={`badge ${item.type === "Lost" ? "text-bg-danger" : "text-bg-success"}`}
         >
           {item.type}
         </span>
 
-        <span className="category-badge">{item.category}</span>
+        <span className="badge text-bg-light">{item.category}</span>
       </div>
 
-      <h3>{item.title}</h3>
-      <p className="item-description">{item.description}</p>
+      <h3 className="h5">{item.title}</h3>
+      <p className="text-secondary">{item.description}</p>
 
-      <p className="item-location">
-        <span aria-hidden="true">⌖</span> {item.location}
+      <p className="text-secondary small mt-auto">
+        <BsGeoAlt aria-hidden="true" /> {item.location}
       </p>
 
-      <div className="item-actions">
+      <div className="d-flex gap-2">
         <button
           type="button"
-          className="button button-primary"
+          className="btn btn-primary btn-sm"
           onClick={() => onViewDetails(item)}
         >
-          Details
+          <BsEye /> Details
         </button>
 
         <button
           type="button"
-          className="button button-secondary"
+          className="btn btn-outline-secondary btn-sm"
           onClick={() => onEdit(item)}
         >
-          Edit
+          <BsPencil /> Edit
         </button>
 
         <button
           type="button"
-          className="button button-danger"
+          className="btn btn-outline-danger btn-sm"
           aria-label={`Delete ${item.title}`}
           onClick={handleDelete}
         >
-          Delete
+          <BsTrash /> Delete
         </button>
+      </div>
+      </div>
       </div>
     </article>
   );

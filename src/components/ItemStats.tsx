@@ -21,11 +21,15 @@ export default function ItemStats({ items }: ItemStatsProps) {
   ];
 
   return (
-    <section className="stats-grid" aria-label="Item statistics">
+    <section className="row g-3 mb-4" aria-label="Item statistics">
       {stats.map((stat) => (
-        <article className="stat-card" key={stat.label}>
-          <span>{stat.label}</span>
-          <strong>{stat.value}</strong>
+        <article className="col-md-4" key={stat.label}>
+          <div className="card h-100 shadow-sm">
+            <div className="card-body">
+              <span className="text-secondary d-block">{stat.label}</span>
+              <strong className="fs-2 text-primary">{stat.value}</strong>
+            </div>
+          </div>
         </article>
       ))}
     </section>

@@ -5,64 +5,40 @@ type ItemDetailsProps = {
   onClose: () => void;
 };
 
-export default function ItemDetails({
-  item,
-  onClose,
-}: ItemDetailsProps) {
+export default function ItemDetails({ item, onClose }: ItemDetailsProps) {
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <section
-        className="modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="details-title"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="modal-heading">
-          <h2 id="details-title">Item details</h2>
-          <button
-            type="button"
-            className="icon-button"
-            aria-label="Close details"
-            onClick={onClose}
-          >
-            ×
-          </button>
+    <div className="modal d-block bg-dark bg-opacity-50" tabIndex={-1} role="dialog" onClick={onClose}>
+      <section className="modal-dialog modal-dialog-centered" role="document">
+        <div className="modal-content" onClick={(event) => event.stopPropagation()}>
+          <div className="modal-header">
+            <h2 className="modal-title fs-5" id="details-title">Item details</h2>
+            <button type="button" className="btn-close" aria-label="Close details" onClick={onClose} />
+          </div>
+          <div className="modal-body">
+            <span className={`badge mb-3 ${item.type === "Lost" ? "text-bg-danger" : "text-bg-success"}`}>
+              {item.type}
+            </span>
+            <h3 className="h5">{item.title}</h3>
+            <p className="text-secondary">{item.description}</p>
+            <dl className="row">
+              <div className="col-4">
+                <dt>Category</dt>
+                <dd>{item.category}</dd>
+              </div>
+              <div className="col-4">
+                <dt>Location</dt>
+                <dd>{item.location}</dd>
+              </div>
+              <div className="col-4">
+                <dt>Reported</dt>
+                <dd>{item.createdAt ? new Date(item.createdAt).toLocaleString() : "Date unavailable"}</dd>
+              </div>
+            </dl>
+            <button type="button" className="btn btn-primary w-100" onClick={onClose}>
+              Close
+            </button>
+          </div>
         </div>
-
-        <span
-          className={`status-badge ${
-            item.type === "Lost" ? "status-lost" : "status-found"
-          }`}
-        >
-          {item.type}
-        </span>
-
-        <h3>{item.title}</h3>
-        <p>{item.description}</p>
-
-        <dl className="details-list">
-          <div>
-            <dt>Category</dt>
-            <dd>{item.category}</dd>
-          </div>
-          <div>
-            <dt>Location</dt>
-            <dd>{item.location}</dd>
-          </div>
-          <div>
-            <dt>Reported</dt>
-            <dd>
-              {item.createdAt
-                ? new Date(item.createdAt).toLocaleString()
-                : "Date unavailable"}
-            </dd>
-          </div>
-        </dl>
-
-        <button type="button" className="button button-primary full-width" onClick={onClose}>
-          Close
-        </button>
       </section>
     </div>
   );

@@ -60,10 +60,10 @@ export default function ItemForm({
   }
 
   return (
-    <form className="item-form" onSubmit={handleSubmit}>
-      <div className="form-field">
-        <label htmlFor="item-title">Item title *</label>
-        <input
+    <form onSubmit={handleSubmit}>
+      <div className="mb-3">
+        <label className="form-label" htmlFor="item-title">Item title *</label>
+        <input className="form-control"
           id="item-title"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
@@ -72,9 +72,9 @@ export default function ItemForm({
         />
       </div>
 
-      <div className="form-field">
-        <label htmlFor="item-description">Description *</label>
-        <textarea
+      <div className="mb-3">
+        <label className="form-label" htmlFor="item-description">Description *</label>
+        <textarea className="form-control"
           id="item-description"
           value={description}
           onChange={(event) => setDescription(event.target.value)}
@@ -84,9 +84,9 @@ export default function ItemForm({
         />
       </div>
 
-      <div className="form-field">
-        <label htmlFor="item-category">Category *</label>
-        <select
+      <div className="mb-3">
+        <label className="form-label" htmlFor="item-category">Category *</label>
+        <select className="form-select"
           id="item-category"
           value={category}
           onChange={(event) =>
@@ -101,9 +101,9 @@ export default function ItemForm({
         </select>
       </div>
 
-      <div className="form-field">
-        <label htmlFor="item-location">Location *</label>
-        <input
+      <div className="mb-3">
+        <label className="form-label" htmlFor="item-location">Location *</label>
+        <input className="form-control"
           id="item-location"
           value={location}
           onChange={(event) => setLocation(event.target.value)}
@@ -112,12 +112,12 @@ export default function ItemForm({
         />
       </div>
 
-      <fieldset className="type-fieldset">
-        <legend>Report type *</legend>
+      <fieldset className="mb-3">
+        <legend className="fs-6">Report type *</legend>
 
         {ITEM_TYPES.map((value) => (
-          <label className="radio-option" key={value}>
-            <input
+          <label className="form-check form-check-inline" key={value}>
+            <input className="form-check-input"
               type="radio"
               name="item-type"
               value={value}
@@ -130,21 +130,21 @@ export default function ItemForm({
       </fieldset>
 
       {error && (
-        <p className="form-error" role="alert">
+        <div className="alert alert-danger" role="alert">
           {error}
-        </p>
+        </div>
       )}
 
-      <div className="form-actions">
+      <div className="d-flex justify-content-end gap-2">
         <button
-          className="button button-secondary"
+          className="btn btn-outline-secondary"
           type="button"
           onClick={onCancel}
         >
           Cancel
         </button>
 
-        <button className="button button-primary" type="submit">
+        <button className="btn btn-primary" type="submit">
           {initialItem ? "Save Changes" : "Report Item"}
         </button>
       </div>

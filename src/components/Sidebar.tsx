@@ -1,5 +1,13 @@
 import { APP_DESCRIPTION, APP_NAME } from "../constants/app";
 import sideImage from "../assets/sidelogo.jpg";
+import {
+  BsBell,
+  BsGrid,
+  BsQuestionCircle,
+  BsSearch,
+  BsGear,
+  BsFileText,
+} from "react-icons/bs";
 
 type SidebarProps = {
   activeSection: string;
@@ -7,30 +15,12 @@ type SidebarProps = {
   profileName: string;
 };
 
-function Icon({ name }: { name: string }) {
-  const paths: Record<string, string> = {
-    home: "M3 10.5 12 3l9 7.5M5.5 9v11h13V9M9 20v-6h6v6",
-    dashboard: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z",
-    browse: "m21 21-4.4-4.4M10.8 18a7.2 7.2 0 1 1 0-14.4 7.2 7.2 0 0 1 0 14.4Z",
-    reports: "M6 3h9l3 3v15H6zM9 11h6M9 15h6M9 7h3",
-    notifications: "M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4",
-    settings:
-      "M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4ZM19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.8 1.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5v.1h-2.5v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1-1.8-1.8.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H6.5v-2.5h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1 1.8-1.8.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.5v-.1H15v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.8 1.8-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.5 1h.1V14h-.1a1.7 1.7 0 0 0-1.5 1Z",
-  };
-
-  return (
-    <svg className="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true">
-      <path d={paths[name]} />
-    </svg>
-  );
-}
-
-const navItems = [
-  ["Dashboard", "dashboard"],
-  ["Browse Items", "browse"],
-  ["My Reports", "reports"],
-  ["Notifications", "notifications"],
-  ["Settings", "settings"],
+const navItems: Array<[string, string, typeof BsGrid]> = [
+  ["Dashboard", "dashboard", BsGrid],
+  ["Browse Items", "browse", BsSearch],
+  ["My Reports", "reports", BsFileText],
+  ["Notifications", "notifications", BsBell],
+  ["Settings", "settings", BsGear],
 ];
 
 export default function Sidebar({
@@ -39,56 +29,51 @@ export default function Sidebar({
   profileName,
 }: SidebarProps) {
   return (
-    <aside className="sidebar">
-      <a className="sidebar-brand" href="#home" aria-label="CampusFind home">
-        <span className="sidebar-brand-mark">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="10.5" cy="10.5" r="6.5" />
-            <path d="m15.5 15.5 5 5M8.5 10.5h4M10.5 8.5v4" />
-          </svg>
-        </span>
-        <span>
+    <aside className="sidebar bg-body border-end p-3 d-flex flex-column">
+      <a className="navbar-brand d-flex align-items-center gap-2 mb-4" href="#home" aria-label="CampusFind home">
+        <span className="bg-primary text-white rounded p-2"><BsSearch /></span>
+        <span className="d-flex flex-column">
           <strong>{APP_NAME}</strong>
-          <small>{APP_DESCRIPTION}</small>
+          <small className="text-secondary">{APP_DESCRIPTION}</small>
         </span>
       </a>
-      <div className="sidebar-image-card">
-        <img src={sideImage} alt="" aria-hidden="true" />
-        <span>Reconnect what matters.</span>
+      <div className="card border-0 bg-primary-subtle mb-4 overflow-hidden">
+        <img className="card-img-top" src={sideImage} alt="" aria-hidden="true" />
+        <div className="card-body py-2"><small className="text-primary-emphasis">Reconnect what matters.</small></div>
       </div>
 
-      <nav className="sidebar-nav" aria-label="Main navigation">
-        <span className="sidebar-label">Workspace</span>
-        {navItems.map(([label, icon]) => (
+      <nav className="nav nav-pills flex-column gap-1" aria-label="Main navigation">
+        <span className="text-uppercase text-secondary small fw-semibold px-3 mb-2">Workspace</span>
+        {navItems.map(([label, icon, Icon]) => (
           <button
-            className={`sidebar-link ${activeSection === icon ? "active" : ""}`}
+            className={`nav-link text-start d-flex align-items-center gap-2 ${activeSection === icon ? "active" : ""}`}
             type="button"
             onClick={() => onNavigate(icon)}
             key={label}
             aria-current={activeSection === icon ? "page" : undefined}
           >
-            <Icon name={icon} />
+            <Icon aria-hidden="true" />
             <span>{label}</span>
           </button>
         ))}
       </nav>
 
-      <div className="sidebar-footer">
-        <div className="sidebar-help">
-          <span className="help-icon">?</span>
+      <div className="mt-auto pt-4">
+        <div className="alert alert-primary d-flex gap-2 align-items-start py-2">
+          <BsQuestionCircle className="mt-1" />
           <div>
-            <strong>Need a hand?</strong>
-            <p>We're here to help.</p>
+            <strong className="d-block">Need a hand?</strong>
+            <small>We're here to help.</small>
           </div>
         </div>
-        <div className="sidebar-user">
-          <img src={sideImage} alt={profileName} />
+        <div className="d-flex align-items-center gap-2 border-top pt-3">
+          <img className="rounded-circle" width="36" height="36" src={sideImage} alt={profileName} />
           <div>
-            <strong>{profileName}</strong>
-            <span>Student account</span>
+            <strong className="d-block small">{profileName}</strong>
+            <small className="text-secondary">Student account</small>
           </div>
         </div>
-        <p className="sidebar-copyright">© 2024 CampusFind</p>
+        <small className="text-secondary d-block mt-3">© 2024 CampusFind</small>
       </div>
     </aside>
   );

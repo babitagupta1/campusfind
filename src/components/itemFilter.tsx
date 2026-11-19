@@ -5,6 +5,7 @@ import {
 } from "../constants/item";
 
 import type { ItemCategory, ItemType } from "../types/item";
+import { BsSearch, BsX } from "react-icons/bs";
 
 type ItemFiltersProps = {
   search: string;
@@ -28,21 +29,25 @@ export default function ItemFilters({
   clearFilters,
 }: ItemFiltersProps) {
   return (
-    <section className="filter-panel">
-      <div className="search-box">
-        <label htmlFor="item-search">Search items</label>
-        <input
+    <section className="card shadow-sm mb-4">
+      <div className="card-body row g-3 align-items-end">
+      <div className="col-lg-5">
+        <label className="form-label" htmlFor="item-search">Search items</label>
+        <div className="input-group">
+          <span className="input-group-text"><BsSearch /></span>
+          <input className="form-control"
           id="item-search"
           type="search"
           placeholder="Search title, location, description..."
           value={search}
           onChange={(event) => setSearch(event.target.value)}
-        />
+          />
+        </div>
       </div>
 
-      <div className="filter-field">
-        <label htmlFor="type-filter">Item type</label>
-        <select
+      <div className="col-md-3">
+        <label className="form-label" htmlFor="type-filter">Item type</label>
+        <select className="form-select"
           id="type-filter"
           value={typeFilter}
           onChange={(event) =>
@@ -58,9 +63,9 @@ export default function ItemFilters({
         </select>
       </div>
 
-      <div className="filter-field">
-        <label htmlFor="category-filter">Category</label>
-        <select
+      <div className="col-md-3">
+        <label className="form-label" htmlFor="category-filter">Category</label>
+        <select className="form-select"
           id="category-filter"
           value={categoryFilter}
           onChange={(event) =>
@@ -78,13 +83,16 @@ export default function ItemFilters({
         </select>
       </div>
 
+      <div className="col-md-3 col-lg-1">
       <button
-        className="button button-secondary clear-button"
+        className="btn btn-outline-secondary w-100"
         type="button"
         onClick={clearFilters}
       >
-        Clear filters
+        <BsX /> <span className="d-lg-none">Clear</span>
       </button>
+      </div>
+      </div>
     </section>
   );
 }

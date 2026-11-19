@@ -13,33 +13,35 @@ export default function EditItem({
   onClose,
 }: EditItemProps) {
   return (
-    <div className="modal-backdrop" onClick={onClose}>
+    <div className="modal d-block bg-dark bg-opacity-50" tabIndex={-1} role="dialog" onClick={onClose}>
       <section
-        className="modal"
+        className="modal-dialog modal-dialog-centered"
         role="dialog"
         aria-modal="true"
         aria-labelledby="edit-title"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="modal-heading">
+        <div className="modal-content" onClick={(event) => event.stopPropagation()}>
+        <div className="modal-header">
           <div>
-            <h2 id="edit-title">Edit Item</h2>
-            <p className="muted">Update the item information.</p>
+            <h2 className="modal-title fs-5" id="edit-title">Edit Item</h2>
+            <p className="text-secondary mb-0">Update the item information.</p>
           </div>
           <button
-            className="icon-button"
+            type="button"
+            className="btn-close"
             aria-label="Close edit form"
             onClick={onClose}
           >
-            ×
           </button>
         </div>
 
-        <ItemForm
+        <div className="modal-body"><ItemForm
           initialItem={item}
           onSubmit={onSave}
           onCancel={onClose}
-        />
+        /></div>
+        </div>
       </section>
     </div>
   );
